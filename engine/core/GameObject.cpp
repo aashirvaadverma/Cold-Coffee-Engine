@@ -22,6 +22,8 @@ void GameObject::SetPlayerControlled(bool controlled)
 
 void GameObject::Update(float deltaTime)
 {
+    m_PreviousPosition = m_Transform.position;
+    
     if (!m_PlayerControlled)
         return;
 

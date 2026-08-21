@@ -57,6 +57,7 @@ add_executable(
     Engine/Core/SpriteRenderer.cpp
     Engine/Core/Texture.cpp
     Engine/Core/AssetManager.cpp
+    Engine/Core/Collider.cpp
 )
 
 target_link_libraries(

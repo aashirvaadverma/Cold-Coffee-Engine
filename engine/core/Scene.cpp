@@ -10,9 +10,30 @@ GameObject& Scene::CreateObject()
 
 void Scene::Update(float deltaTime)
 {
-    for (const auto& object : m_Objects)
+    for (auto& object : m_Objects)
     {
         object->Update(deltaTime);
+    }
+
+    // Check collisions between objects
+    for (size_t i = 0; i < m_Objects.size(); ++i)
+    {
+        for (size_t j = i + 1; j < m_Objects.size(); ++j)
+        {
+            Transform& a = m_Objects[i]->GetTransform();
+            Transform& b = m_Objects[j]->GetTransform();
+
+            bool isColliding =
+                m_Objects[i]->GetCollider().CheckCollision(a, b);
+
+            if (isColliding)
+            {
+                m_Objects[i]->GetTransform().position =
+                    m_Objects[i]->GetPreviousPosition();
+
+                SDL_Log("COLLISION!");
+            }
+        }
     }
 }
 
