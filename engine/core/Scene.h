@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include <utility>
 
 #include "GameObject.h"
 
@@ -19,4 +20,5 @@ public:
 
 private:
     std::vector<std::unique_ptr<GameObject>> m_Objects;
+    std::vector<std::pair<GameObject*, GameObject*>> m_CollidingPairs;
 };

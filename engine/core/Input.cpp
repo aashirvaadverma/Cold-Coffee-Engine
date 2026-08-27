@@ -24,6 +24,10 @@ bool Input::IsKeyDown(Key key)
             scancode = SDL_SCANCODE_D;
             break;
 
+        case Key::SPACE:
+            scancode = SDL_SCANCODE_SPACE;
+            break;
+
         case Key::Escape:
             scancode = SDL_SCANCODE_ESCAPE;
             break;

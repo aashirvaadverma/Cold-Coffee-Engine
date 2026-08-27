@@ -27,27 +27,57 @@ void GameObject::Update(float deltaTime)
     if (!m_PlayerControlled)
         return;
 
-    if (Input::IsKeyDown(Key::W))
-    {
-        m_Transform.position.y -= m_Speed * deltaTime;
-    }
+    m_Velocity.x = 0.0f;
 
-    if (Input::IsKeyDown(Key::S))
-    {
-        m_Transform.position.y += m_Speed * deltaTime;
-    }
+    // if (Input::IsKeyDown(Key::W))
+    // {
+    //     m_Velocity.y = -m_Speed;
+    // }
+
+    // if (Input::IsKeyDown(Key::S))
+    // {
+    //     m_Velocity.y = m_Speed;
+    // }
 
     if (Input::IsKeyDown(Key::A))
     {
-        m_Transform.position.x -= m_Speed * deltaTime;
+        m_Velocity.x = -m_Speed;
     }
 
     if (Input::IsKeyDown(Key::D))
     {
-        m_Transform.position.x += m_Speed * deltaTime;
+        m_Velocity.x = m_Speed;
+    }
+    if (Input::IsKeyDown(Key::SPACE) && m_IsGrounded)
+    {
+        m_Velocity.y = -m_JumpForce;
+        m_IsGrounded = false;
     }
 
+
     // Keep the player inside the window.
+//     if (m_Transform.position.x < 0.0f)
+//         m_Transform.position.x = 0.0f;
+
+//     if (m_Transform.position.y < 0.0f)
+//         m_Transform.position.y = 0.0f;
+
+//     if (m_Transform.position.x > 1280.0f - m_Transform.scale.x)
+//         m_Transform.position.x = 1280.0f - m_Transform.scale.x;
+
+//     if (m_Transform.position.y > 720.0f - m_Transform.scale.y)
+//         m_Transform.position.y = 720.0f - m_Transform.scale.y;
+}
+
+void GameObject::ApplyVelocity(float deltaTime)
+{
+    m_IsGrounded = false;
+
+    m_Velocity.y += m_Gravity * deltaTime;
+
+    m_Transform.position.x += m_Velocity.x * deltaTime;
+    m_Transform.position.y += m_Velocity.y * deltaTime;
+
     if (m_Transform.position.x < 0.0f)
         m_Transform.position.x = 0.0f;
 
@@ -58,5 +88,11 @@ void GameObject::Update(float deltaTime)
         m_Transform.position.x = 1280.0f - m_Transform.scale.x;
 
     if (m_Transform.position.y > 720.0f - m_Transform.scale.y)
-        m_Transform.position.y = 720.0f - m_Transform.scale.y;
+    {
+        m_Transform.position.y =
+            720.0f - m_Transform.scale.y;
+
+        m_Velocity.y = 0.0f;
+        m_IsGrounded = true;
+    }
 }

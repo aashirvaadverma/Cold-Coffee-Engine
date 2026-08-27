@@ -8,6 +8,7 @@ enum class Key
     A,
     S,
     D,
+    SPACE,
     Escape
 };
 
