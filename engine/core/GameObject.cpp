@@ -48,6 +48,7 @@ void GameObject::Update(float deltaTime)
     {
         m_Velocity.x += m_Acceleration * deltaTime;
     }
+    
     if (!Input::IsKeyDown(Key::A) && !Input::IsKeyDown(Key::D))
     {
         if (m_Velocity.x > 0.0f)
@@ -65,10 +66,16 @@ void GameObject::Update(float deltaTime)
                 m_Velocity.x = 0.0f;
         }
     }
+
     if (Input::IsKeyDown(Key::SPACE) && m_IsGrounded)
     {
         m_Velocity.y = -m_JumpForce;
         m_IsGrounded = false;
+    }
+
+    if (!Input::IsKeyDown(Key::SPACE) && m_Velocity.y < 0.0f)
+    {
+        m_Velocity.y *= 0.5f;
     }
 
 
