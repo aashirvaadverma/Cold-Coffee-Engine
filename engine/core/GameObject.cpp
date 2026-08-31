@@ -72,7 +72,6 @@ void GameObject::Update(float deltaTime)
     }
 
 
-    // Keep the player inside the window.
 //     if (m_Transform.position.x < 0.0f)
 //         m_Transform.position.x = 0.0f;
 
