@@ -27,7 +27,7 @@ void GameObject::Update(float deltaTime)
     if (!m_PlayerControlled)
         return;
 
-    m_Velocity.x = 0.0f;
+    // m_Velocity.x = 0.0f;
 
     // if (Input::IsKeyDown(Key::W))
     // {
@@ -41,12 +41,29 @@ void GameObject::Update(float deltaTime)
 
     if (Input::IsKeyDown(Key::A))
     {
-        m_Velocity.x = -m_Speed;
+        m_Velocity.x -= m_Acceleration * deltaTime;
     }
 
     if (Input::IsKeyDown(Key::D))
     {
-        m_Velocity.x = m_Speed;
+        m_Velocity.x += m_Acceleration * deltaTime;
+    }
+    if (!Input::IsKeyDown(Key::A) && !Input::IsKeyDown(Key::D))
+    {
+        if (m_Velocity.x > 0.0f)
+        {
+            m_Velocity.x -= m_Friction * deltaTime;
+
+            if (m_Velocity.x < 0.0f)
+                m_Velocity.x = 0.0f;
+        }
+        else if (m_Velocity.x < 0.0f)
+        {
+            m_Velocity.x += m_Friction * deltaTime;
+
+            if (m_Velocity.x > 0.0f)
+                m_Velocity.x = 0.0f;
+        }
     }
     if (Input::IsKeyDown(Key::SPACE) && m_IsGrounded)
     {

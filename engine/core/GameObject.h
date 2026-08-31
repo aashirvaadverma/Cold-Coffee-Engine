@@ -53,4 +53,6 @@ private:
     float m_Gravity = 1400.0f;
     float m_JumpForce = 750.0f;
     bool m_IsGrounded = false;
+    float m_Acceleration = 1500.0f;
+    float m_Friction = 1200.0f;
 };
