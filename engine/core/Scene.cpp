@@ -44,29 +44,33 @@ void Scene::Update(float deltaTime)
 
             if (isColliding)
             {
-                Transform& playerTransform =
-                    m_Objects[i]->GetTransform();
-
-                Transform& otherTransform =
-                    m_Objects[j]->GetTransform();
-
-                Vector2 previousPosition =
-                    m_Objects[i]->GetPreviousPosition();
-
-                // Vertical collision: player landed on top.
-                if (previousPosition.y + playerTransform.scale.y <=
-                    otherTransform.position.y)
+                if (m_Objects[i]->IsPlayerControlled())
                 {
-                    playerTransform.position.y =
-                        otherTransform.position.y - playerTransform.scale.y;
+                    Transform& playerTransform =
+                        m_Objects[i]->GetTransform();
 
-                    m_Objects[i]->GetVelocity().y = 0.0f;
-                    m_Objects[i]->SetGrounded(true);
-                }
-                // Horizontal collision.
-                else
-                {
-                    playerTransform.position.x = previousPosition.x;
+                    Transform& otherTransform =
+                        m_Objects[j]->GetTransform();
+
+                    Vector2 previousPosition =
+                        m_Objects[i]->GetPreviousPosition();
+
+                    // Player landed on top.
+                    if (previousPosition.y + playerTransform.scale.y <=
+                        otherTransform.position.y)
+                    {
+                        playerTransform.position.y =
+                            otherTransform.position.y - playerTransform.scale.y;
+
+                        m_Objects[i]->GetVelocity().y = 0.0f;
+                        m_Objects[i]->SetGrounded(true);
+                    }
+                    // Player hit the side.
+                    else
+                    {
+                        playerTransform.position.x =
+                            previousPosition.x;
+                    }
                 }
 
                 if (!wasColliding)
@@ -75,36 +79,77 @@ void Scene::Update(float deltaTime)
                     m_CollidingPairs.push_back(currentPair);
                 }
             }
-            for (auto it = m_CollidingPairs.begin();
-                it != m_CollidingPairs.end();)
-            {
-                GameObject* first = it->first;
-                GameObject* second = it->second;
 
-                bool stillColliding =
-                    first->GetCollider().CheckCollision(
-                        first->GetTransform(),
-                        second->GetTransform()
-                    );
+        }
+    }
+    for (auto it = m_CollidingPairs.begin();
+    it != m_CollidingPairs.end();)
+    {
+        GameObject* first = it->first;
+        GameObject* second = it->second;
 
-                if (!stillColliding)
+        bool stillColliding =
+            first->GetCollider().CheckCollision(
+                first->GetTransform(),
+                second->GetTransform()
+            );
+
+            if (!stillColliding)
                 {
                     SDL_Log("COLLISION EXIT");
                     it = m_CollidingPairs.erase(it);
                 }
-                else
+            else
                 {
                     ++it;
                 }
-            }
-        }
     }
 }
 
 void Scene::Render(Renderer& renderer)
 {
+    // Draw everything except the player first.
     for (const auto& object : m_Objects)
     {
+        if (object->IsPlayerControlled())
+            continue;
+
+        Transform& transform = object->GetTransform();
+        SpriteRenderer& sprite = object->GetSpriteRenderer();
+
+        if (sprite.GetTexture())
+        {
+            renderer.DrawTexture(
+                sprite.GetTexture()->GetSDLTexture(),
+                transform.position.x,
+                transform.position.y,
+                transform.scale.x,
+                transform.scale.y
+            );
+        }
+        else
+        {
+            Color& color = sprite.GetColor();
+
+            renderer.DrawRectangle(
+                transform.position.x,
+                transform.position.y,
+                transform.scale.x,
+                transform.scale.y,
+                color.r,
+                color.g,
+                color.b,
+                color.a
+            );
+        }
+    }
+
+    // Draw player last so it appears in front.
+    for (const auto& object : m_Objects)
+    {
+        if (!object->IsPlayerControlled())
+            continue;
+
         Transform& transform = object->GetTransform();
         SpriteRenderer& sprite = object->GetSpriteRenderer();
 

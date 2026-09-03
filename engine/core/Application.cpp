@@ -69,6 +69,25 @@ bool Application::Initialize()
     m_Enemy->GetSpriteRenderer().GetColor() =
         { 70, 120, 180, 255 };
 
+    // CREATE PLATFORM
+    GameObject& platform = m_Scene.CreateObject();
+
+    platform.GetTransform().position = { 350.0f, 550.0f };
+    platform.GetTransform().scale = { 500.0f, 50.0f };
+
+    platform.GetSpriteRenderer().GetColor() =
+        { 100, 180, 100, 255 };
+
+    // CREATE SECOND PLATFORM
+    GameObject& platform2 = m_Scene.CreateObject();
+
+    platform2.GetTransform().position = { 800.0f, 420.0f };
+    platform2.GetTransform().scale = { 300.0f, 50.0f };
+
+    platform2.GetSpriteRenderer().GetColor() =
+        { 180, 150, 80, 255 };
+
+    
     m_Running = true;
 
     return true;

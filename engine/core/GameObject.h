@@ -15,6 +15,10 @@ public:
     void Update(float deltaTime);
 
     void SetPlayerControlled(bool controlled);
+    bool IsPlayerControlled() const
+    {
+        return m_PlayerControlled;
+    }
 
     Collider& GetCollider()
     {
